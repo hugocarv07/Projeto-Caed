@@ -14,7 +14,7 @@ Construí um pipeline completo: limpeza do dataset → instâncias curtas → fe
 
 Três conclusões que considero mais importantes: (i) a forma de dividir treino/teste muda tudo (o mesmo modelo vai de 0,75 para 0,87 de F1 numa divisão aleatória, por vazamento); (ii) a canonicidade ajuda pouco como feature isolada; (iii) as mutações quase não alteram a complexidade prevista (variação média ≤ 0,03 numa escala de 0 a 3), o que serve bem ao objetivo de criar textos novos de nível equivalente.
 
-Código, modelos, dados processados e instruções de execução: repositório `https://github.com/SEU_USUARIO/caed-complexidade`  e README.md.
+Código, modelos, dados processados e instruções de execução: repositório `https://github.com/hugocarv07/Projeto-Caed.git`  e README.md.
 
 ## 2. Dados e pré-processamento
 
