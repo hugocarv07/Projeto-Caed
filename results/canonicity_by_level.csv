@@ -1,0 +1,5 @@
+level,canonical_word_ratio,canonical_type_ratio,shape_CV,noncanon_syll_per_word
+0,0.23,0.201,0.483,1.054
+1,0.22,0.179,0.492,1.135
+2,0.229,0.194,0.502,1.102
+3,0.221,0.179,0.501,1.121

@@ -1,0 +1,18 @@
+11630 instâncias, 69 features numéricas
+baseline (classe majoritária)                 CV F1=0.142±0.006 acc=0.398 | TESTE F1=0.144 acc=0.406 MAE=1.026 (1s)
+LR · só tamanho/silabas                       CV F1=0.400±0.021 acc=0.417 | TESTE F1=0.330 acc=0.338 MAE=1.025 (1s)
+LR · features (sem canonicidade)              CV F1=0.563±0.021 acc=0.584 | TESTE F1=0.496 acc=0.508 MAE=0.641 (6s)
+LR · features                                 CV F1=0.576±0.022 acc=0.599 | TESTE F1=0.518 acc=0.536 MAE=0.596 (7s)
+RandomForest · features                       CV F1=0.568±0.066 acc=0.625 | TESTE F1=0.515 acc=0.561 MAE=0.544 (37s)
+HistGB · features (sem canonicidade)          CV F1=0.603±0.022 acc=0.634 | TESTE F1=0.561 acc=0.577 MAE=0.539 (79s)
+HistGB · features                             CV F1=0.610±0.020 acc=0.644 | TESTE F1=0.586 acc=0.609 MAE=0.487 (83s)
+TF-IDF palavras · LR                          CV F1=0.744±0.021 acc=0.777 | TESTE F1=0.728 acc=0.781 MAE=0.253 (28s)
+TF-IDF chars · LR                             CV F1=0.753±0.020 acc=0.783 | TESTE F1=0.755 acc=0.793 MAE=0.242 (121s)
+Híbrido: features + TF-IDF palavras · LR      CV F1=0.705±0.018 acc=0.736 | TESTE F1=0.678 acc=0.716 MAE=0.340 (81s)
+split ALEATÓRIO (vazamento) LR · features F1=0.621
+split ALEATÓRIO (vazamento) HistGB · features F1=0.658
+split ALEATÓRIO (vazamento) TF-IDF palavras · LR F1=0.872
+split ALEATÓRIO (vazamento) TF-IDF chars · LR F1=0.873
+split ALEATÓRIO (vazamento) Híbrido: features + TF-IDF palavras · LR F1=0.814
+MELHOR (CV): TF-IDF chars · LR
+modelos salvos

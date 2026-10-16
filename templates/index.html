@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Complexidade textual · CAEd</title>
+<style>
+  :root{--bg:#f7f6f2;--card:#fff;--ink:#1d2433;--mut:#667085;--line:#e4e1d8;--acc:#1f5eff;--ok:#16794c;--bad:#b42318;--ins:#d7f5df;--del:#fde0dc}
+  @media (prefers-color-scheme:dark){:root{--bg:#14161b;--card:#1c1f26;--ink:#eceff4;--mut:#9aa3b2;--line:#2c313c;--acc:#7da2ff;--ok:#5fd3a0;--bad:#ff9b8e;--ins:#1d4a33;--del:#5a2823}}
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+  main{max-width:1060px;margin:0 auto;padding:28px 16px 64px}
+  h1{font-size:1.5rem;margin:0 0 4px} .sub{color:var(--mut);margin:0 0 20px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+  h2{font-size:1rem;margin:0 0 10px;letter-spacing:.01em}
+  textarea{width:100%;min-height:150px;resize:vertical;border:1px solid var(--line);border-radius:8px;padding:12px;background:transparent;color:inherit;font:inherit}
+  .row{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin-top:12px}
+  label.chk{display:flex;gap:6px;align-items:center;cursor:pointer}
+  button{background:var(--acc);color:#fff;border:0;border-radius:8px;padding:10px 16px;font:inherit;font-weight:600;cursor:pointer}
+  button.sec{background:transparent;color:var(--acc);border:1px solid var(--acc)} button:disabled{opacity:.5;cursor:wait}
+  select,input[type=number]{font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:transparent;color:inherit}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px} @media(max-width:760px){.grid{grid-template-columns:1fr}}
+  .bar{display:grid;grid-template-columns:150px 1fr 46px;align-items:center;gap:8px;margin:5px 0;font-size:.92rem}
+  .bar i{display:block;height:10px;border-radius:5px;background:var(--line);overflow:hidden} .bar i b{display:block;height:100%;background:var(--acc)}
+  .bar.top b{background:var(--ok)} .big{font-size:1.25rem;font-weight:700} .mut{color:var(--mut);font-size:.9rem}
+  .words span{display:inline-block;margin:2px 3px 2px 0;padding:1px 6px;border-radius:6px;font-size:.88rem;border:1px solid var(--line);cursor:help}
+  .words .ok{color:var(--ok);border-color:var(--ok)} .words .no{color:var(--mut)}
+  ins{background:var(--ins);text-decoration:none;border-radius:3px;padding:0 1px} del{background:var(--del);border-radius:3px;padding:0 1px}
+  .out{white-space:pre-wrap} table{border-collapse:collapse;width:100%;font-size:.9rem} td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  .delta{font-weight:700} .err{color:var(--bad)} .hidden{display:none}
+</style>
+</head>
+<body><main>
+<h1>Complexidade textual</h1>
+<p class="sub">Classifica um texto em quatro níveis de complexidade, gera novas versões por mutação e mostra quanto a complexidade prevista muda.</p>
+
+<div class="card">
+  <h2>Texto</h2>
+  <textarea id="text" placeholder="Cole aqui um texto curto em português…">O texto foi lido pelo aluno. A cantora era famosa e muito querida pelos vizinhos. Há duas semanas atrás estava chovendo.</textarea>
+  <div class="row">
+    <button id="bAn">Classificar</button>
+    <span class="mut">ou escolha mutações abaixo</span>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Mutação</h2>
+  <div class="row" style="margin-top:0">
+    <label class="chk"><input type="checkbox" class="op" value="paraphrase" checked> Paráfrase</label>
+    <label class="chk"><input type="checkbox" class="op" value="gender" checked> Troca de gênero</label>
+    <label class="chk"><input type="checkbox" class="op" value="word" checked> Troca de palavras</label>
+  </div>
+  <div class="row">
+    <label>Intensidade <input type="range" id="rate" min="0.1" max="1" step="0.1" value="0.5"> <b id="rv">0.5</b></label>
+    <label>Palavras:
+      <select id="wmode"><option value="mixed">sinônimos + antônimos</option><option value="synonym">só sinônimos</option><option value="antonym">só antônimos</option></select></label>
+    <label>Direção:
+      <select id="dir"><option value="random">aleatória</option><option value="simpler">mais simples</option><option value="harder">mais difícil</option></select></label>
+    <label>Semente <input type="number" id="seed" style="width:80px" placeholder="auto"></label>
+    <button id="bMut">Gerar novo texto</button>
+  </div>
+  <p class="err" id="err"></p>
+</div>
+
+<div id="res" class="hidden">
+  <div class="card" id="mutCard"><h2>Novo texto <span class="mut">(verde = inserido, vermelho = removido)</span></h2><div class="out" id="diff"></div>
+    <table id="chg" style="margin-top:12px"></table></div>
+  <div class="grid">
+    <div class="card"><h2>Original</h2><div id="a1"></div></div>
+    <div class="card" id="cardB"><h2>Depois da mutação</h2><div id="a2"></div></div>
+  </div>
+</div>
+
+<div class="card hidden" id="canCard"><h2>Canonicidade das palavras <span class="mut">(verde = só sílabas CV; passe o mouse para ver as sílabas)</span></h2>
+  <div id="canText" class="mut" style="margin-bottom:8px"></div><div class="words" id="words"></div></div>
+
+</main>
+<script>
+const LV = {{ levels|tojson }};
+const $ = s => document.querySelector(s);
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+$('#rate').oninput = e => $('#rv').textContent = e.target.value;
+
+async function post(url, body){
+  const r = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const j = await r.json(); if(!r.ok) throw new Error(j.error||'erro'); return j;
+}
+function panel(a){
+  const m = a.main, p = m.probs;
+  let h = `<div class="big">${m.label}</div><div class="mut">escore contínuo ${m.score.toFixed(2)} (0 = EF I … 3 = Superior)</div>`;
+  LV.forEach(n => h += `<div class="bar ${n===m.label?'top':''}"><span>${n}</span><i><b style="width:${(p[n]*100).toFixed(0)}%"></b></i><span>${(p[n]*100).toFixed(0)}%</span></div>`);
+  if(a.features) h += `<div class="mut" style="margin-top:8px">Modelo de features (interpretável): <b>${a.features.label}</b> · escore ${a.features.score.toFixed(2)}</div>`;
+  h += `<div class="mut">Palavras canônicas: <b>${(a.canonicity.ratio*100).toFixed(0)}%</b> de ${a.canonicity.n_words}</div>`;
+  return h;
+}
+function canon(a){
+  $('#canCard').classList.remove('hidden');
+  $('#canText').textContent = `${(a.canonicity.ratio*100).toFixed(0)}% das palavras são canônicas.`;
+  $('#words').innerHTML = a.canonicity.words.map(w => `<span class="${w.ok?'ok':'no'}" title="${esc(w.syl)}">${esc(w.w)}</span>`).join('');
+}
+function busy(b){ $('#bAn').disabled = $('#bMut').disabled = b; }
+
+$('#bAn').onclick = async () => {
+  $('#err').textContent=''; busy(true);
+  try{ const a = await post('/api/analyze',{text:$('#text').value});
+    $('#res').classList.remove('hidden'); $('#mutCard').classList.add('hidden'); $('#cardB').classList.add('hidden');
+    $('#a1').innerHTML = panel(a); canon(a);
+  }catch(e){ $('#err').textContent=e.message } busy(false);
+};
+$('#bMut').onclick = async () => {
+  $('#err').textContent=''; busy(true);
+  try{
+    const ops=[...document.querySelectorAll('.op:checked')].map(x=>x.value);
+    const r = await post('/api/mutate',{text:$('#text').value,ops,rate:$('#rate').value,word_mode:$('#wmode').value,direction:$('#dir').value,seed:$('#seed').value});
+    $('#res').classList.remove('hidden'); $('#mutCard').classList.remove('hidden'); $('#cardB').classList.remove('hidden');
+    $('#diff').innerHTML = r.diff.map(d => d.t==='eq'?esc(d.x):d.t==='ins'?`<ins>${esc(d.x)}</ins>`:`<del>${esc(d.x)}</del>`).join('');
+    $('#chg').innerHTML = r.changes.length ? '<tr><th>Operador</th><th>Antes</th><th>Depois</th></tr>' + r.changes.map(c =>
+      `<tr><td>${esc(c.kind||c.op)}${c.op==='word'||c.op==='gender'?'':''}</td><td>${esc(c.before)}</td><td>${esc(c.after)}</td></tr>`).join('') : '<tr><td>Nenhuma alteração aplicável com esta semente/intensidade.</td></tr>';
+    const d = r.after.main.score - r.before.main.score;
+    $('#a1').innerHTML = panel(r.before);
+    $('#a2').innerHTML = panel(r.after) + `<div style="margin-top:8px">Δ complexidade: <span class="delta">${d>=0?'+':''}${d.toFixed(3)}</span> <span class="mut">(${r.before.main.label} → ${r.after.main.label})</span></div>`;
+    canon(r.after);
+  }catch(e){ $('#err').textContent=e.message } busy(false);
+};
+</script></body></html>

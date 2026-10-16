@@ -1,0 +1,15 @@
+treinado TF-IDF chars 24s
+treinado HistGB features 18s
+amostra: 240 textos
+troca de palavras (sinônimos+antônimos)    alterados=83% TF-IDF chars: Δ=+0.010 (|Δ|=0.048, troca classe 3%) | HistGB features: Δ=-0.005 (|Δ|=0.066, troca classe 5%)  [9s]
+troca de palavras → só sinônimos           alterados=80% TF-IDF chars: Δ=+0.007 (|Δ|=0.047, troca classe 2%) | HistGB features: Δ=+0.000 (|Δ|=0.078, troca classe 6%)  [9s]
+troca de palavras → mais simples           alterados=54% TF-IDF chars: Δ=-0.003 (|Δ|=0.027, troca classe 2%) | HistGB features: Δ=-0.022 (|Δ|=0.039, troca classe 3%)  [8s]
+troca de palavras → mais difícil           alterados=67% TF-IDF chars: Δ=+0.015 (|Δ|=0.035, troca classe 2%) | HistGB features: Δ=+0.026 (|Δ|=0.058, troca classe 7%)  [8s]
+troca de gênero                            alterados=6% TF-IDF chars: Δ=+0.001 (|Δ|=0.002, troca classe 0%) | HistGB features: Δ=-0.001 (|Δ|=0.001, troca classe 0%)  [8s]
+paráfrase                                  alterados=16% TF-IDF chars: Δ=+0.003 (|Δ|=0.004, troca classe 0%) | HistGB features: Δ=-0.002 (|Δ|=0.010, troca classe 1%)  [9s]
+as três (aleatório)                        alterados=89% TF-IDF chars: Δ=+0.014 (|Δ|=0.050, troca classe 6%) | HistGB features: Δ=+0.002 (|Δ|=0.071, troca classe 6%)  [16s]
+intensidade 0.1 {'TF-IDF chars': 0.006133322677529415, 'HistGB features': -0.0027764444242502776, 'pct_changed': 47.91666666666667}
+intensidade 0.3 {'TF-IDF chars': 0.01297717731086449, 'HistGB features': -0.0011549022132321266, 'pct_changed': 87.91666666666667}
+intensidade 0.6 {'TF-IDF chars': 0.026391160407184987, 'HistGB features': 0.006469281859658587, 'pct_changed': 97.5}
+intensidade 1.0 {'TF-IDF chars': 0.03233089728468997, 'HistGB features': 0.025932729003932658, 'pct_changed': 98.75}
+escore médio por nível {'TF-IDF chars': [0.27761183558982677, 0.8010642647281101, 1.8353040509071759, 2.5988581335244203], 'HistGB features': [0.2587834416821245, 0.9074162125966768, 2.028390727437705, 2.5226576646292145]}
